@@ -108,4 +108,5 @@ class PreProcessing:
         for elem in temp_array:
             gain_attribute -= (elem['count'] / len(self.data)) * elem['entropy']
 
-        return gain_attribute, temp_array.copy()
+        #return gain_attribute, temp_array.copy()
+        return gain_attribute
