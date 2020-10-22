@@ -20,7 +20,7 @@ def DecisionTree(examples = [], attributes = [], standard = ''):
         #print(different_values)
         attributes.pop(attributes.index(best))
         #attributes_minus_best = attributes.pop(attributes.index(best))
-        print(attributes)
+        #print(attributes)
 
         for v_i in different_values:
             examples_i = BestEqualsVi(examples, best, v_i)
@@ -85,9 +85,20 @@ def BestEqualsVi(examples, best, v_i):
 
     return examples_equals_vi
 
-def TestData(tree, test_data):
-    num_correct = 0
-    num_test_data = len(test_data)
+def TestDataDecisionTree(tree, test_data):
+    all_elements_sum = 0
+    hit_rate = 0
+    confusion_matrix = \
+    [[0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]]
+    p_o = 0
+    p_e = 0
+    kappa_statistic = 0
+    mean_square_error = 0
 
     for test in test_data:
         edges = tree.edges
@@ -96,9 +107,118 @@ def TestData(tree, test_data):
                 if test[edge.father.attribute] == edge.value:
                     break
             if (edge.child == 'I' or edge.child == 'II' or edge.child == 'III' or edge.child == 'IV' or edge.child == 'V' or edge.child == 'VI'): 
-                if edge.child == test['Accident Level']:
-                    num_correct += 1
+                confusion_matrix[roman_to_int(test['Accident Level']) - 1][roman_to_int(edge.child) - 1] += 1
                 break
             edges = edge.child.edges
 
-    return num_correct / num_test_data
+    for i in range(len(confusion_matrix)):
+        for j in range(len(confusion_matrix)):
+            all_elements_sum += confusion_matrix[i][j]
+        hit_rate += confusion_matrix[i][i]
+    hit_rate /= all_elements_sum
+
+    distribution = [0.75, 0.09, 0.07, 0.07, 0.02, 0]
+    confusion_matrix_expected_distribution = \
+    [[0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]]
+    for i in range(len(confusion_matrix_expected_distribution)):
+        for j in range(len(confusion_matrix_expected_distribution)):
+            confusion_matrix_expected_distribution[i][j] = round(distribution[j] * sum(confusion_matrix[i]), 2)
+    #for row in confusion_matrix_expected_distribution:
+    #    print(row)
+    p_o = hit_rate
+    for i in range(len(confusion_matrix_expected_distribution)):
+        p_e += confusion_matrix_expected_distribution[i][i]
+    p_e /= all_elements_sum
+    kappa_statistic = round((p_o - p_e) / (1 - p_e), 2)
+
+    temp = 0
+    for j in range(len(confusion_matrix)):
+        temp = sum(confusion_matrix[j])
+        for i in range(len(confusion_matrix)):
+            temp -= confusion_matrix[i][j]
+        mean_square_error += temp ** 2
+    mean_square_error /= len(confusion_matrix)
+    mean_square_error = round(mean_square_error, 4)
+
+    return hit_rate, confusion_matrix, mean_square_error, kappa_statistic
+
+def TestDataAPriori(test_data):
+    classifications_mode = MajorityValue(test_data)
+
+    all_elements_sum = 0
+    hit_rate = 0
+    confusion_matrix = \
+    [[0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]]
+    p_o = 0
+    p_e = 0
+    kappa_statistic = 0
+    mean_square_error = 0
+
+    for test in test_data:
+        confusion_matrix[roman_to_int(test['Accident Level']) - 1][roman_to_int(classifications_mode) - 1] += 1
+
+    for i in range(len(confusion_matrix)):
+        for j in range(len(confusion_matrix)):
+            all_elements_sum += confusion_matrix[i][j]
+        hit_rate += confusion_matrix[i][i]
+    hit_rate /= all_elements_sum
+
+    distribution = [0.75, 0.09, 0.07, 0.07, 0.02, 0]
+    confusion_matrix_expected_distribution = \
+    [[0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0]]
+    for i in range(len(confusion_matrix_expected_distribution)):
+        for j in range(len(confusion_matrix_expected_distribution)):
+            confusion_matrix_expected_distribution[i][j] = round(distribution[j] * sum(confusion_matrix[i]), 2)
+    #for row in confusion_matrix_expected_distribution:
+    #    print(row)
+    p_o = hit_rate
+    for i in range(len(confusion_matrix_expected_distribution)):
+        p_e += confusion_matrix_expected_distribution[i][i]
+    p_e /= all_elements_sum
+    kappa_statistic = round((p_o - p_e) / (1 - p_e), 2)
+
+    temp = 0
+    for j in range(len(confusion_matrix)):
+        temp = sum(confusion_matrix[j])
+        for i in range(len(confusion_matrix)):
+            temp -= confusion_matrix[i][j]
+        mean_square_error += temp ** 2
+    mean_square_error /= len(confusion_matrix)
+    mean_square_error = round(mean_square_error, 4)
+
+    return hit_rate, confusion_matrix, mean_square_error, kappa_statistic
+
+def roman_to_int(input):
+    input = input.upper( )
+    nums = {'M':1000,
+            'D':500,
+            'C':100,
+            'L':50,
+            'X':10,
+            'V':5,
+            'I':1}
+    sum = 0
+    for i in range(len(input)):
+        value = nums[input[i]]
+        if i+1 < len(input) and nums[input[i+1]] > value:
+            sum -= value
+        else: 
+            sum += value
+        
+    return sum
+
