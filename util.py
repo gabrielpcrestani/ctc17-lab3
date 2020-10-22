@@ -43,7 +43,6 @@ class PreProcessing:
             del self.data[temp]
         for i in range(data_initial_size - test_data_size):
             self.training_data.append(self.data[i])
-            #del data[i]
         self.read_csv()
 
         return self.training_data.copy(), self.test_data.copy()
@@ -70,7 +69,7 @@ class PreProcessing:
 
         #print(len(data_array))
         #print(accident_level_values)
-
+        
         entropy_S = 0
 
         for elem in accident_level_values:

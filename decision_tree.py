@@ -19,12 +19,10 @@ def DecisionTree(examples = [], attributes = [], standard = ''):
         different_values = DifferentValues(best, examples)
         #print(different_values)
         attributes.pop(attributes.index(best))
-        #attributes_minus_best = attributes.pop(attributes.index(best))
         #print(attributes)
 
         for v_i in different_values:
             examples_i = BestEqualsVi(examples, best, v_i)
-
             #print(examples_i)
             #print(attributes_minus_best)
             #print(m)
@@ -61,13 +59,6 @@ def ChooseAttribute(attributes, examples):
         attributes_gains.append(pre_processing.gain(attribute))
 
     return attributes[attributes_gains.index(max(attributes_gains))]
-    #country_gain, country_gain_array = pre_processing.gain('Country')
-    #local_gain, local_gain_array = pre_processing.gain('Local')
-    #sector_gain, sector_gain_array = pre_processing.gain('Industry Sector')
-    #potential_gain, potential_gain_array = pre_processing.gain('Potential Accident Level')
-    #genre_gain, genre_gain_array = pre_processing.gain('Genre')
-    #mployee_gain, employee_gain_array = pre_processing.gain('Employee ou Terceiro')
-    #risco_gain, risco_gain_array = pre_processing.gain('Risco Critico')
 
 def DifferentValues(best, examples):
     values = []
@@ -221,4 +212,3 @@ def roman_to_int(input):
             sum += value
         
     return sum
-

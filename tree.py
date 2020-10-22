@@ -3,9 +3,7 @@
 class Node:
     def __init__(self, attribute):
         self.edges = []
-        self.attribute = attribute
-        #self.value = value
-        #self.attribute_values = attribute_values   
+        self.attribute = attribute  
 
     def add(self, edge):
         self.edges.append(edge)    
