@@ -2,7 +2,6 @@ from util import PreProcessing
 from tree import Node     
 from decision_tree import DecisionTree, MajorityValue, TestDataDecisionTree, TestDataAPriori   
 
-
 pre_processing = PreProcessing('accident_data.csv')
 data = pre_processing.read_csv()
 entropia_S = pre_processing.entropy(data)

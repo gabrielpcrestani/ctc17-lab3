@@ -98,7 +98,7 @@ def TestDataDecisionTree(tree, test_data):
                 if test[edge.father.attribute] == edge.value:
                     break
             if (edge.child == 'I' or edge.child == 'II' or edge.child == 'III' or edge.child == 'IV' or edge.child == 'V' or edge.child == 'VI'): 
-                confusion_matrix[roman_to_int(test['Accident Level']) - 1][roman_to_int(edge.child) - 1] += 1
+                confusion_matrix[RomanToInt(test['Accident Level']) - 1][RomanToInt(edge.child) - 1] += 1
                 break
             edges = edge.child.edges
 
@@ -156,7 +156,7 @@ def TestDataAPriori(test_data):
     mean_square_error = 0
 
     for test in test_data:
-        confusion_matrix[roman_to_int(test['Accident Level']) - 1][roman_to_int(classifications_mode) - 1] += 1
+        confusion_matrix[RomanToInt(test['Accident Level']) - 1][RomanToInt(classifications_mode) - 1] += 1
 
     for i in range(len(confusion_matrix)):
         for j in range(len(confusion_matrix)):
@@ -194,7 +194,7 @@ def TestDataAPriori(test_data):
 
     return hit_rate, confusion_matrix, mean_square_error, kappa_statistic
 
-def roman_to_int(input):
+def RomanToInt(input):
     input = input.upper( )
     nums = {'M':1000,
             'D':500,
