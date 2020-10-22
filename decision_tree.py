@@ -89,7 +89,6 @@ def TestDataDecisionTree(tree, test_data):
     p_o = 0
     p_e = 0
     kappa_statistic = 0
-    mean_square_error = 0
 
     for test in test_data:
         edges = tree.edges
@@ -127,16 +126,7 @@ def TestDataDecisionTree(tree, test_data):
     p_e /= all_elements_sum
     kappa_statistic = round((p_o - p_e) / (1 - p_e), 2)
 
-    temp = 0
-    for j in range(len(confusion_matrix)):
-        temp = sum(confusion_matrix[j])
-        for i in range(len(confusion_matrix)):
-            temp -= confusion_matrix[i][j]
-        mean_square_error += temp ** 2
-    mean_square_error /= len(confusion_matrix)
-    mean_square_error = round(mean_square_error, 4)
-
-    return hit_rate, confusion_matrix, mean_square_error, kappa_statistic
+    return hit_rate, confusion_matrix, kappa_statistic
 
 def TestDataAPriori(test_data):
     classifications_mode = MajorityValue(test_data)
@@ -153,7 +143,6 @@ def TestDataAPriori(test_data):
     p_o = 0
     p_e = 0
     kappa_statistic = 0
-    mean_square_error = 0
 
     for test in test_data:
         confusion_matrix[RomanToInt(test['Accident Level']) - 1][RomanToInt(classifications_mode) - 1] += 1
@@ -183,16 +172,7 @@ def TestDataAPriori(test_data):
     p_e /= all_elements_sum
     kappa_statistic = round((p_o - p_e) / (1 - p_e), 2)
 
-    temp = 0
-    for j in range(len(confusion_matrix)):
-        temp = sum(confusion_matrix[j])
-        for i in range(len(confusion_matrix)):
-            temp -= confusion_matrix[i][j]
-        mean_square_error += temp ** 2
-    mean_square_error /= len(confusion_matrix)
-    mean_square_error = round(mean_square_error, 4)
-
-    return hit_rate, confusion_matrix, mean_square_error, kappa_statistic
+    return hit_rate, confusion_matrix, kappa_statistic
 
 def RomanToInt(input):
     input = input.upper( )
