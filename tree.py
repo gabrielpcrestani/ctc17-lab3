@@ -15,6 +15,7 @@ class Node:
                 print("Edge child: ", edge.child)
                 print()
             else:
+                print("Value: ", edge.value, "; Son:", edge.child.attribute)
                 self.printTree(edge.child)
     
 class Edge:

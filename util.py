@@ -9,8 +9,7 @@ class PreProcessing:
         self.training_data = []
         self.test_data = []
         self.entropy_S = 0
-        self.data_array_entropy = []
-
+        
     def read_csv(self):
         self.data = []
         with open(self.file_name, newline='') as csvfile:
